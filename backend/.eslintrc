@@ -1,0 +1,15 @@
+{
+    "extends": ["eslint:recommended", "airbnb"],
+    "plugins": [
+        "mocha",
+        "chai-expect"
+    ],
+    "rules": {
+        "no-console": "off",
+        "linebreak-style": 0
+    },
+    "env": {
+        "node": true,
+        "mocha": true
+    }
+}

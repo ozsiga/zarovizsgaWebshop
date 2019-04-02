@@ -1,0 +1,166 @@
+<nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01"
+    aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="container">
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+      <a class="navbar-brand" routerLink="home" routerLinkActive="active" id="shop">
+        <i id="logo" class="fab fa-gitlab"></i> Crane Crew</a>
+      <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+        <li class="nav-item active">
+          <a routerLink="aboutus" routerLinkActive="active" class="nav-link">Elérhetőség
+            <span class="sr-only">(current)</span>
+          </a>
+        </li>
+        <li class="nav-item active">
+          <a *ngIf="(longgedIn && isAdmin)" routerLink="dashboard" routerLinkActive="active" class="nav-link">Dashboard
+            <span class="sr-only">(current)</span>
+          </a>
+        </li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="nav-item">
+          <a routerLinkActive="active" routerLink="cart" class="nav-link">
+            <i class="fas fa-shopping-cart"></i>
+            <span class="badge badge-success badge-pill">{{global.badge}}</span>
+          </a>
+        </li>
+        <li>
+          <a *ngIf="(longgedIn)" routerLinkActive="active" routerLink="profile" class="nav-link">{{loggedInUser.user.username}}</a>
+        </li>
+        <li class="nav-item">
+          <a *ngIf="(longgedIn && isAdmin)" routerLinkActive="active" routerLink="../orders" class="nav-link">Rendelések</a>
+        </li>
+        <li class="nav-item">
+          <a routerLinkActive="active" routerLink="../products" class="nav-link">Termékek</a>
+        </li>
+        <li class="nav-item">
+          <a *ngIf="(longgedIn && isAdmin)" routerLinkActive="active" routerLink="category" class="nav-link">Kategóriák</a>
+        </li>
+        <li class="nav-item">
+          <a *ngIf="(longgedIn && isAdmin)" routerLinkActive="active" routerLink="../users" class="nav-link">Felhasználók</a>
+        </li>
+      </ul>
+      <form class="form-inline my-2 my-lg-0">
+        <div class="button-group">
+          <button *ngIf="(!registerred && !longgedIn)" class="btn btn-danger my-2 my-sm-0" type="button" data-toggle="modal" data-target="#exampleModal">Regisztráció</button>
+          <button *ngIf="(!longgedIn)" class="btn btn-success my-2 my-sm-0" type="button" data-toggle="modal" data-target="#exampleModalCenter">Belépés</button>
+          <button *ngIf="(longgedIn)" class="btn btn-warning my-2 my-sm-0" type="button" (click)="logout()" routerLinkActive="active"
+            routerLink="home">Kilépés</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</nav>
+<div>&nbsp;</div>
+<div>&nbsp;</div>
+<div>&nbsp;</div>
+
+<!-- regisztáció modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Regisztráció</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="form">
+          <div class="form-group">
+            <label for="username">Felhasználónév</label>
+            <div>
+              <input type="text" name="username" class="form-control" placeholder="Felhasználónév" formControlName="username" [(ngModel)]='newuser.username'>
+              <div class="alert alert-danger" *ngIf="form.controls.username.errors?.required && form.controls.username.dirty">A mező kitöltése kötelező</div>
+              <div class="alert alert-danger" *ngIf="form.controls.username.errors?.minlength || form.controls.username.errors?.maxlength">
+                A felhasználónév minimum 3, maximum 30 karakter hosszú.
+              </div>
+              <div class="alert alert-danger" *ngIf="form.controls.username.errors?.validateUsername && form.controls.username.dirty">A felhasználónév nem tartalmazhat speciális karaktereket.</div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="email">Email</label>
+            <div>
+              <input type="text" name="email" class="form-control" placeholder="Email" formControlName="email" [(ngModel)]='newuser.email'>
+              <div class="alert alert-danger" *ngIf="form.controls.email.errors?.required && form.controls.email.dirty">A mező kitöltése kötelező</div>
+              <div class="alert alert-danger" *ngIf="(form.controls.email.errors?.minlength || form.controls.email.errors?.maxlength) && form.controls.email.dirty">
+                Az email cím minimum 5, maximum 50 karakter hosszú.
+              </div>
+              <div class="alert alert-danger" *ngIf="form.controls.email.errors?.validateEmail && form.controls.email.dirty">Érvényes email címet kell megadnod.</div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="password">Jelszó</label>
+            <div>
+              <input type="password" name="password" class="form-control" placeholder="Jelszó" formControlName="password" [(ngModel)]='newuser.password'>
+              <div class="alert alert-danger" *ngIf="form.controls.password.errors?.required && form.controls.password.dirty">A mező kitöltése kötelező</div>
+              <div class="alert alert-danger" *ngIf="form.controls.password.errors?.minlength || form.controls.password.errors?.maxlength">
+                A jelszó minimum 8, maximum 80 karakter hosszú.
+              </div>
+              <div class="alert alert-danger" *ngIf="form.controls.password.errors?.validatePassword && form.controls.password.dirty">A jelszó csak kis, nagybetűket és számokat tartalmazhat.</div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="confirm">Jelszó ismét</label>
+            <div>
+              <input type="password" name="confirm" class="form-control" placeholder="Jelszó ismét" formControlName="confirm">
+              <div class="alert alert-danger" *ngIf="form.controls.confirm.errors?.required && form.controls.confirm.dirty">A mező kitöltése kötelező</div>
+              <div class="alert alert-danger" *ngIf="form.errors?.samePasswords && form.controls.confirm.dirty">A jelszavak nem egyeznek.</div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <div class="row show-hide-message">
+          <div [ngClass]="messageClass">
+            {{message}}
+          </div>
+        </div>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Bezárás</button>
+        <button [disabled]="!form.valid" type="button" class="btn btn-success" (click)="register()" data-dismiss="modal">Küldés</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- login modal -->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Belépés</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" (keyup.enter)="login()">
+        <form [formGroup]="form">
+          <div class="form-group">
+            <label for="username">E-mail cím:</label>
+            <div>
+              <input type="text" name="username" class="form-control" placeholder="Email" formControlName="username" [(ngModel)]="user.username">
+              <div class="alert alert-danger" *ngIf="form.controls.username.errors?.required && form.controls.username.dirty">A mező kitöltése kötelező</div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="password">Jelszó</label>
+            <div>
+              <input type="password" name="password" class="form-control" placeholder="Jelszó" formControlName="password" [(ngModel)]="user.password">
+              <div class="alert alert-danger" *ngIf="form.controls.password.errors?.required && form.controls.password.dirty">A mező kitöltése kötelező</div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <div class="row show-hide-message">
+          <div [ngClass]="messageClass2">
+            {{message2}}
+          </div>
+        </div>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Bezárás</button>
+        <button type="button" class="btn btn-success" (click)="login()" data-dismiss="modal">Belépés</button>
+      </div>
+    </div>
+  </div>
+</div>

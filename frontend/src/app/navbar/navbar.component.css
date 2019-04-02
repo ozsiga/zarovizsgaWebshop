@@ -1,0 +1,24 @@
+.navbar .navbar-nav>li>a {
+  color: white;
+  font-size: 18px;
+}
+  
+.navbar .navbar-nav>li>a:hover,
+.navbar .navbar-nav>li>a:focus {
+  color: #E0A800;
+  cursor: pointer;
+}
+
+#logo {
+  color: red;
+  font-size: 1.5em;
+  padding-right: 10px;
+}
+
+#shop {
+  font-size: 1.5em;
+}
+
+.fa-shopping-cart {
+  font-size: 1.3em;
+}

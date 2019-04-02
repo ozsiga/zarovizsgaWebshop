@@ -1,0 +1,94 @@
+<br>
+<h2>
+  <i class="fas fa-user"></i> Felhasználók</h2>
+<hr>
+
+<button class="btn btn-info my-2 my-sm-0" type="button" data-toggle="modal" data-target="#createModal">Létrehozás</button>
+<div>&nbsp;</div>
+<table class="table table-bordered table-striped text-center">
+  <thead>
+    <th>Felhasználónév</th>
+    <th>Email</th>
+    <th>Jogosultság</th>
+    <th>Számlázási cím</th>
+    <th>Szállítási cím</th>
+    <th>Telefonszám</th>
+    <th>Művelet</th>
+  </thead>
+  <tbody>
+    <tr>
+    </tr>
+    <tr *ngFor="let user of users">
+      <td>
+        <input type="text" class="form-control" [(ngModel)]="user.username">
+      </td>
+      <td>
+        <input type="text" class="form-control" [(ngModel)]="user.email">
+      </td>
+      <td>
+        <select class="custom-select" name="userRole" [(ngModel)]="user.role">
+          <option value="admin">admin</option>
+          <option value="user">user</option>
+        </select>
+      </td>
+      <td>
+        <input type="text" class="form-control" [(ngModel)]="user.billingAddress.Country">
+        <input type="text" class="form-control" [(ngModel)]="user.billingAddress.City">
+        <input type="text" class="form-control" [(ngModel)]="user.billingAddress.Street">
+        <input type="text" class="form-control" [(ngModel)]="user.billingAddress.Zipcode">
+      </td>
+      <td>
+        <input type="text" class="form-control" [(ngModel)]="user.shippingAddress.Country">
+        <input type="text" class="form-control" [(ngModel)]="user.shippingAddress.City">
+        <input type="text" class="form-control" [(ngModel)]="user.shippingAddress.Street">
+        <input type="text" class="form-control" [(ngModel)]="user.shippingAddress.Zipcode">
+      </td>
+      <td>
+        <input type="text" class="form-control" [(ngModel)]="user.phoneNumber">
+      </td>
+      <td>
+        <div class="btn-group">
+          <button type="button" class="btn btn-info" (click)="editUser(user)">Módosít</button>
+          <button type="button" class="btn btn-danger" (click)="removeUser(user)">Töröl</button>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<div>&nbsp;</div>
+<div>&nbsp;</div>
+
+<!-- create modal -->
+<div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="createModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Létrehozás</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <label for="username">Felhasználónév</label>
+        <input type="text" class="form-control" value="username" name="username" id="newUsername" [(ngModel)]="newUser.username">
+        <br>
+        <label for="email">Email</label>
+        <input type="text" class="form-control" name="email" id="newUserEmail" [(ngModel)]="newUser.email">
+        <br>
+        <label for="password">Jelszó</label>
+        <input type="text" class="form-control" name="password" id="newUserPassword" [(ngModel)]="newUser.password">
+        <br>
+        <label for="phoneNumber">Telefonszám</label>
+        <input type="text" class="form-control" name="phoneNumber" [(ngModel)]="newUser.phoneNumber">
+      </div>
+      <div class="modal-footer">
+        <div class="row show-hide-message">
+          <div [ngClass]="messageClass">
+            {{message}}
+          </div>
+        </div>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Bezárás</button>
+        <input type="button" class="btn btn-success" value="Létrehozás" name="create" id="" (click)="addUser()">
+      </div>
+    </div>
+  </div>

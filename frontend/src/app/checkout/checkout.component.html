@@ -1,0 +1,129 @@
+<br>
+<h2>
+  <i class="fas fa-money-bill-alt"></i> Fizetés
+</h2>
+<hr>
+
+<div class="container">
+  <div class="row">
+      <div class="col-xs-12 col-lg-6">
+      <table class="table table-bordered text-center">
+        <thead>
+          <th>Név</th>
+          <th>Ár</th>
+          <th>Darabszám</th>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of cart; let i = index">
+            <td>{{item.name}}</td>
+            <td>{{item.price | currency: 'Ft '}}</td>
+            <td>
+              <div class="btn-group">
+                <button class="btn btn-light" (click)="removeOne(i)">-</button>
+                <input type="text" value="1" class="text-center" min="0" size="1" [(ngModel)]="newOrder.items[i].quantity">
+                <button class="btn btn-info" (click)="addOneMore(i)">+</button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td><strong>Összesen:</strong></td>
+            <td>{{newOrder.price | currency: 'Ft '}}</td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="col-xs-12 col-lg-6">
+      <form *ngIf="loggedInUser.user.username">
+        <div class="form-group">
+          <label for="name">Név</label>
+          <input type="text" class="form-control" name="username" [(ngModel)]="loggedInUser.user.username" #username="ngModel" required>
+        </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="text" class="form-control" name="email" [(ngModel)]="loggedInUser.user.email" #email="ngModel" required>
+        </div>
+        <div class="form-group">
+          <label for="phone">Telefonszám</label>
+          <input type="text" class="form-control" name="phoneNumber" [(ngModel)]="loggedInUser.user.phoneNumber" #phoneNumber="ngModel" required>
+        </div>
+        <div class="form-group">
+          <label for="phone">Számlázási cím</label>
+          <div class="input-group">
+              <input type="text" class="form-control"  name="billingAddress1" [(ngModel)]="loggedInUser.user.billingAddress.Country" #billingAddress1="ngModel" name="currentUserBillingAddress1" required>
+              <div class="input-group-append">
+                <span class="input-group-text">Ország</span>
+              </div>
+            </div>
+            <div class="input-group">
+                <input type="text" class="form-control"  name="billingAddress2" [(ngModel)]="loggedInUser.user.billingAddress.City" #billingAddress2="ngModel" name="currentUserBillingAddress2" required>
+                <div class="input-group-append">
+                <span class="input-group-text">Város</span>
+                </div>
+              </div>
+              <div class="input-group">
+                  <input type="text" class="form-control" name="billingAddress3" [(ngModel)]="loggedInUser.user.billingAddress.Street" #billingAddress3="ngModel" name="currentUserBillingAddress3" required>
+                  <div class="input-group-append">
+                  <span class="input-group-text">Cím</span>
+                  </div>
+                </div>
+                <div class="input-group">
+                    <input type="number" class="form-control" name="billingAddress4" [(ngModel)]="loggedInUser.user.billingAddress.Zipcode" #billingAddress4="ngModel" name="currentUserBillingAddress4" required>
+                    <div class="input-group-append">
+                    <span class="input-group-text">Irányító szám</span>
+                    </div>
+                  </div>
+        </div>
+        <div class="form-group">
+          <label for="phone">Szállítási cím</label>
+          <div class="input-group">
+              <input type="text" class="form-control" name="shippingAddress1" [(ngModel)]="loggedInUser.user.shippingAddress.Country" #shippingAddress1="ngModel" required>
+              <div class="input-group-append">
+              <span class="input-group-text">Ország</span>
+              </div>
+            </div>
+            <div class="input-group">
+                <input type="text" class="form-control" name="shippingAddress2" [(ngModel)]="loggedInUser.user.shippingAddress.City" #shippingAddress2="ngModel" required>
+                <div class="input-group-append">
+                <span class="input-group-text">Budapest</span>
+                </div>
+              </div>
+              <div class="input-group">
+                  <input type="text" class="form-control" name="shippingAddress3" [(ngModel)]="loggedInUser.user.shippingAddress.Street" #shippingAddress3="ngModel" required>
+                  <div class="input-group-append">
+                  <span class="input-group-text">Cím</span>
+                  </div>
+                </div>
+                <div class="input-group">
+                    <input type="number" class="form-control" name="shippingAddress4" [(ngModel)]="loggedInUser.user.shippingAddress.Zipcode" #shippingAddress4="ngModel" required>
+                    <div class="input-group-append">
+                    <span class="input-group-text">Irányító szám</span>
+                    </div>
+                  </div>
+  
+        </div>
+        <div class="alert alert-danger" *ngIf="!username.valid || !email.valid || !phoneNumber.valid 
+        || !billingAddress1.valid || !shippingAddress1.valid
+        || !billingAddress2.valid || !shippingAddress2.valid
+        || !billingAddress3.valid || !shippingAddress3.valid
+        || !billingAddress4.valid || !shippingAddress4.valid">A kapcsolati adatok hiányosak, kérjük töltse fel elérhetőségeivel, majd mentse az adatlapot!</div>
+        <button class="btn btn-secondary" (click)="editUser()" [disabled]="!username.valid || !email.valid || !phoneNumber.valid 
+        || !billingAddress1.valid || !shippingAddress1.valid
+        || !billingAddress2.valid || !shippingAddress2.valid
+        || !billingAddress3.valid || !shippingAddress3.valid
+        || !billingAddress4.valid || !shippingAddress4.valid">Adatok mentése</button>
+        <a routerLink="../cart"><button class="btn btn-info">Vissza a kosárba</button></a>
+        <button class="btn btn-success" (click)="createOrder()" [disabled]="newOrder.price === 0 || !username.valid || !email.valid || !phoneNumber.valid 
+        || !billingAddress1.valid || !shippingAddress1.valid
+        || !billingAddress2.valid || !shippingAddress2.valid
+        || !billingAddress3.valid || !shippingAddress3.valid
+        || !billingAddress4.valid || !shippingAddress4.valid" >Megrendelés</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<br>
+<br>
+<br>
+<br>
